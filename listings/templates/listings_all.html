@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+{% if listings_all %}
+{% else %}
+  <p>No images found.</p>
+{% endif %}
+
+  <div class="row">
+
+{% for listing in listings_all %}
+  {% if forloop.counter0|divisibleby:"3" %}
+    </div>
+    </br></br>
+    <div class="row">
+  {%endif%}
+        <div class="col-lg-4">
+          <div class="card">
+            <img
+              src="../media/{{ listing.img }}"
+              class="card-img-top"
+              alt="{{ image.name }}"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ listing.title }}</h5>
+              <p class="card-text">
+                {{ listing.description }}
+              </p>
+              <a href="/listing/{{ listing.id }}" class="btn btn-outline-secondary">Details</a>
+            </div>
+          </div>
+        </div>
+
+    {%endfor%}
+
+{% endblock %}

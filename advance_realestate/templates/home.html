@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<blockquote class="blockquote text-center" style="margin-top:100px;">
+  <h1>AdVance RealEstate</h1>
+  <p class="mb-0">"Begin your journey to Omaha's finest homes with us today"</p>
+</br></br><p class="lead">Explore this weeks feature:</p>
+</blockquote>
+
+{% if listing_featured %}
+  <div class="col-lg-6" style="margin:auto;">
+    <div class="card">
+      <img
+        src="../media/{{ listing_featured.img }}"
+        class="card-img-top"
+        alt="{{ listing_featured.name }}"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ listing_featured.title }}</h5>
+        <p class="card-text">
+          {{ listing_featured.description }}
+        </p>
+        <a href="#!" class="btn btn-outline-secondary">Details</a>
+      </div>
+    </div>
+  </div>
+{% else %}
+  <p>No feature found.</p>
+{% endif %}
+
+{% endblock %}

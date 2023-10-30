@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<blockquote class="blockquote text-center" style="margin-top:100px;">
+  <h3>{{ listing.title }}</h3>
+</blockquote>
+</br>
+
+<div class="col-lg-6" style="margin:auto;">
+  <div class="card">
+    <img
+      src="../media/{{ listing.img }}"
+      class="card-img-top"
+      alt="{{ listing.name }}"
+    />
+    <div class="card-body">
+      <p class="card-text text-center">
+        {{ listing.description }}
+      </p>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><span class="badge bg-success">Available</span></li>
+        <li class="list-group-item"><bold>Neighborhood:</bold> Downtown</li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+  {% if user.is_authenticated %}
+  {% load bootstrap_icons %}
+  <a class="float_star" >{% bs_icon 'star' size="30px" extra_classes="starbtt" %}</a>
+  <a data-bs-toggle="modal" data-bs-target="#deleteModal" class="float_del">{% bs_icon 'trash3' size="30px" extra_classes="dltbtt" %}</a>
+  {% endif %}
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm deleting {{ listing.title }}?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        This action is non-reversible and the listing will be removed from the database. If it was featured, another listing will get selected.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form action="/listing/delete/{{ listing.id }}"><button type="submit" class="btn btn-danger">Delete</button></form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .float_del{
+      position:fixed;
+      width:60px;
+      height:60px;
+      bottom:40px;
+      right:40px;
+      background-color:#ff4b47;
+      color:#FFF;
+      border-radius:50px;
+  }
+  .dltbtt{
+      margin-top:15px;
+      margin-left:15px;
+  }
+  .float_star{
+    position:fixed;
+    width:60px;
+    height:60px;
+    bottom:120px;
+    right:40px;
+    background-color:#dcdcdc;
+    color:#FFF;
+    border-radius:50px;
+  }
+  .starbtt{
+      margin-top:15px;
+      margin-left:15px;
+      color:black;
+  }
+</style>
+
+{% endblock %}
