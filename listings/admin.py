@@ -1,7 +1,9 @@
 from django.contrib import admin
 
-from listings.models import Listing
+from listings.models import Listing, ListingHomeType, ListingImages, ListingNeigborhood, ListingStatus
 
-@admin.register(Listing)
+
+# Registering all models for admin page
+@admin.register(Listing, ListingStatus, ListingImages, ListingHomeType, ListingNeigborhood)
 class ListingAdmin(admin.ModelAdmin):
     pass

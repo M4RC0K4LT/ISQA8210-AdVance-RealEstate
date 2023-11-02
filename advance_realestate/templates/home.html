@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-
-
 {% block content %}
+
 
 <blockquote class="blockquote text-center" style="margin-top:100px;">
   <h1>AdVance RealEstate</h1>
@@ -9,25 +8,52 @@
 </br></br><p class="lead">Explore this weeks feature:</p>
 </blockquote>
 
+
+
 {% if listing_featured %}
   <div class="col-lg-6" style="margin:auto;">
     <div class="card">
-      <img
-        src="../media/{{ listing_featured.img }}"
-        class="card-img-top"
-        alt="{{ listing_featured.name }}"
-      />
+
+      <!-- Bootstrap Carousel for property images -->
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          {% for img in image_urls %}
+            {% if forloop.first %}
+              <div class="carousel-item active" style="max-width:900px; height:400px !important;">
+            {% else %}
+              <div class="carousel-item" style="max-width:900px; height:400px !important;">
+            {% endif %}
+            <img
+              src="../media/{{ img }}"
+              class="card-img-top"
+              alt="{{ listing.name }}"
+            />
+            </div>  
+          {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <!-- Further details on featured listing -->
       <div class="card-body">
         <h5 class="card-title">{{ listing_featured.title }}</h5>
         <p class="card-text">
           {{ listing_featured.description }}
         </p>
-        <a href="#!" class="btn btn-outline-secondary">Details</a>
+        <a href="/listing/{{ listing.id }}" class="btn btn-outline-secondary">Details</a>
       </div>
     </div>
   </div>
+
 {% else %}
-  <p>No feature found.</p>
+  <p>No feature found for this week.</p>
 {% endif %}
 
 {% endblock %}

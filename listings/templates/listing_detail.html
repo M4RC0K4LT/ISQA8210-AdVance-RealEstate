@@ -1,40 +1,95 @@
 {% extends "base.html" %}
-
-
 {% block content %}
+
+<!-- Page Title -->
 <blockquote class="blockquote text-center" style="margin-top:100px;">
   <h3>{{ listing.title }}</h3>
 </blockquote>
 </br>
 
+<!-- Card: Listing Details -->
 <div class="col-lg-6" style="margin:auto;">
   <div class="card">
-    <img
-      src="../media/{{ listing.img }}"
-      class="card-img-top"
-      alt="{{ listing.name }}"
-    />
+
+    <!-- Bootstrap Carousel for property images -->
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        {% for img in image_urls %}
+          {% if forloop.first %}
+            <div class="carousel-item active">
+          {% else %}
+            <div class="carousel-item">
+          {% endif %}
+          <img
+            src="../media/{{ img }}"
+            class="card-img-top"
+            alt="{{ listing.name }}"
+          />
+          </div>  
+        {% endfor %}
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
     <div class="card-body">
       <p class="card-text text-center">
         {{ listing.description }}
       </p>
+
+      <!-- Property status label -->
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><span class="badge bg-success">Available</span></li>
-        <li class="list-group-item"><bold>Neighborhood:</bold> Downtown</li>
+        <li class="list-group-item">
+          {% if listing.status_id == 1 %}
+            <span class="badge bg-success">Available</span>
+          {% elif listing.status_id == 2 %}
+            <span class="badge bg-secondary">Pending</span>
+          {% elif listing.status_id == 3 %}
+            <span class="badge bg-danger">Sold</span>
+          {% else %}
+            <span class="badge bg-info">Status not disclosed</span>
+          {% endif %}
+
+          <!-- Property status change when admin -->
+          {% if user.is_authenticated %}
+            <div class="btn-group btn-group-sm" style="float:right" role="group" aria-label="Basic example">
+              <a href="/listing/status/{{ listing.id }}/1" role="button" class="btn btn-light">Available</a>
+              <a href="/listing/status/{{ listing.id }}/2"role="button" class="btn btn-light">Pending</a>
+              <a href="/listing/status/{{ listing.id }}/3"role="button" class="btn btn-light">Sold</a>
+            </div>
+          {% endif %}
+        </li>
+
+        <!-- Further details on property -->
+        <li class="list-group-item"><bold>Neighborhood: </bold>{{ listing.neighborhood }}</li>
+        <li class="list-group-item"><bold>Type: </bold>{{ listing.hometype }}</li>
+        <li class="list-group-item"><bold>Price: </bold>{{ listing.price }}</li>
       </ul>
 
     </div>
   </div>
 </div>
 
-  {% if user.is_authenticated %}
+
+<!-- Floating action buttons: Delete and Feature -->
+{% if user.is_authenticated %}
   {% load bootstrap_icons %}
-  <a class="float_star" >{% bs_icon 'star' size="30px" extra_classes="starbtt" %}</a>
-  <a data-bs-toggle="modal" data-bs-target="#deleteModal" class="float_del">{% bs_icon 'trash3' size="30px" extra_classes="dltbtt" %}</a>
+  {% if listing.featured %}
+    <a data-bs-toggle="modal" data-bs-target="#featuredModal"  class="float_btt_feature_selected" >{% bs_icon 'star' size="30px" extra_classes="icon_feature_selected" %}</a>
+  {% else %}
+    <a data-bs-toggle="modal" data-bs-target="#featuredModal"  class="float_btt_feature" >{% bs_icon 'star' size="30px" extra_classes="icon_feature" %}</a>
   {% endif %}
+  <a data-bs-toggle="modal" data-bs-target="#deleteModal" class="float_btt_delete">{% bs_icon 'trash3' size="30px" extra_classes="icon_delete" %}</a>
+{% endif %}
 
 
-<!-- Modal -->
+<!-- Bootstrap Modal: Confirm delete popup -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -53,36 +108,32 @@
   </div>
 </div>
 
-<style>
-  .float_del{
-      position:fixed;
-      width:60px;
-      height:60px;
-      bottom:40px;
-      right:40px;
-      background-color:#ff4b47;
-      color:#FFF;
-      border-radius:50px;
-  }
-  .dltbtt{
-      margin-top:15px;
-      margin-left:15px;
-  }
-  .float_star{
-    position:fixed;
-    width:60px;
-    height:60px;
-    bottom:120px;
-    right:40px;
-    background-color:#dcdcdc;
-    color:#FFF;
-    border-radius:50px;
-  }
-  .starbtt{
-      margin-top:15px;
-      margin-left:15px;
-      color:black;
-  }
-</style>
+<!-- Bootstrap Modal: Confirm featured popup -->
+<div class="modal fade" id="featuredModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        {% if listing.featured %}
+          <h5 class="modal-title" id="exampleModalLabel">Confirm removing feature for {{ listing.title }}?</h5>
+        {% else %}
+          <h5 class="modal-title" id="exampleModalLabel">Confirm featuring {{ listing.title }}?</h5>
+        {% endif %}
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% if listing.featured %}
+          This action will de-select the listing as featured and removes it from the landing page.
+        {% else %}
+          This action will select the listing as featured and displays it on the landing page. The current one will be de-selected.
+        {% endif %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form action="/listing/feature/{{ listing.id }}"><button type="submit" class="btn btn-success">Confirm</button></form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}
