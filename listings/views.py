@@ -1,15 +1,16 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from .forms import ListingImagesUploadForm, ListingUploadForm
-from .models import Listing, ListingImages
+
 from .filters import ListingsFilter
+from .forms import ListingImagesUploadForm, ListingUploadForm
+from .models import Property, Property_Image
 
 
 # All Listings view including filter option
 def listings_view(request):   
-    listings = Listing.objects.all()
-    filtered_listings = ListingsFilter(request.GET, queryset=Listing.objects.all())
+    listings = Property.objects.all()
+    filtered_listings = ListingsFilter(request.GET, queryset=Property.objects.all())
     
     #TODO: Filter tracking / analysis
     #print(request.GET.dict())
@@ -18,21 +19,21 @@ def listings_view(request):
     # Collect all image links for listings to hand them over to template
     listings_images = {}
     for listing in listings:
-        images_to_listing = ListingImages.objects.select_related().filter(listing = listing.id).values()
+        images_to_listing = Property_Image.objects.select_related().filter(property_id = listing.id)
         image_urls = []
         for image in images_to_listing:
-            image_urls.append(image["image"])
+            image_urls.append(str(image.property_image_location))
         listings_images.update({listing.id : image_urls})
     return render(request, 'listings_all.html', {'listings': filtered_listings, "images_all" : listings_images})
 
 
 # Detailed listing view
 def listing_detail_view(request, listing_id):
-    listing = get_object_or_404(Listing, id=listing_id)#
-    images = ListingImages.objects.select_related().filter(listing = listing.id).values()
+    listing = get_object_or_404(Property, id=listing_id)
+    images = Property_Image.objects.select_related().filter(property_id = listing.id).values()
     image_urls = []
     for image in images:
-        image_urls.append(image["image"])
+        image_urls.append(image["property_image_location"])
     return render(request, 'listing_detail.html', context={'listing': listing, 'image_urls': image_urls}) 
 
 
@@ -48,7 +49,7 @@ def listings_upload(request):
             lis = listing_form.save()
             #Save every uploaded image in ListingImage Model
             for img in request.FILES.getlist("image"):
-                images = ListingImages(listing=lis, image=img)
+                images = Property_Image(property_id=lis.id, property_image_location=img)
                 images.save()
             return HttpResponseRedirect('/listing/' + str(lis.id))            
     else:
@@ -60,7 +61,7 @@ def listings_upload(request):
 # Delete listing
 @login_required
 def listing_delete(request, listing_id):
-  listing = Listing.objects.get(id=listing_id)
+  listing = Property.objects.get(id=listing_id)
   listing.delete()
   return HttpResponseRedirect("/listings")
 
@@ -68,11 +69,11 @@ def listing_delete(request, listing_id):
 # Feature listing
 @login_required
 def listing_feature(request, listing_id):
-  listing = Listing.objects.get(id=listing_id)
-  if listing.featured == True:
-      listing.featured = False
+  listing = Property.objects.get(id=listing_id)
+  if listing.property_feature_status == True:
+      listing.property_feature_status = False
   else:
-      listing.featured = True
+      listing.property_feature_status = True
   listing.save()
   return HttpResponseRedirect("/listing/" + str(listing_id))
 
@@ -80,7 +81,7 @@ def listing_feature(request, listing_id):
 # Change status of listing
 @login_required
 def listing_status(request, listing_id, status_id):
-  listing = Listing.objects.get(id=listing_id)
-  listing.status_id = status_id
+  listing = Property.objects.get(id=listing_id)
+  listing.property_status_id = status_id
   listing.save()
   return HttpResponseRedirect("/listing/" + str(listing_id))

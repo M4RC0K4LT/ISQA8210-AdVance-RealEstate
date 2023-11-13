@@ -26,7 +26,7 @@
             <img
               src="../media/{{ img }}"
               class="card-img-top"
-              alt="{{ listing.name }}"
+              alt="{{ listing_featured.property_title }}"
             />
             </div>  
           {% endfor %}
@@ -43,11 +43,11 @@
 
       <!-- Further details on featured listing -->
       <div class="card-body">
-        <h5 class="card-title">{{ listing_featured.title }}</h5>
+        <h5 class="card-title">{{ listing_featured.property_title }}</h5>
         <p class="card-text">
-          {{ listing_featured.description }}
+          {{ listing_featured.property_description }}
         </p>
-        <a href="/listing/{{ listing.id }}" class="btn btn-outline-secondary">Details</a>
+        <a href="/listing/{{ listing_featured.id }}" class="btn btn-outline-secondary">Details</a>
       </div>
     </div>
   </div>
