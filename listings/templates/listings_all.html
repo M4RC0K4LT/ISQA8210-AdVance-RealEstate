@@ -8,9 +8,9 @@
 {% block content %}
 
 <!-- Filter Listings Form -->
-<script src="{% static 'custom_slider.js' %}"></script>
 <form method="get">
-  {% crispy listings.form %}
+  {{ listings.form|crispy }}
+  <input class="btn btn-secondary" type="submit" />
 </form>
 
 
@@ -42,7 +42,7 @@
               <img
                 src="../media/{{ img }}"
                 class="card-img-top"
-                alt="{{ listing.name }}"
+                alt="{{ listing.property_title }}"
               />
               </div>  
             {% endfor %}
@@ -59,9 +59,9 @@
 
         <!-- Further details on listing -->
         <div class="card-body">
-          <h5 class="card-title">{{ listing.title }}</h5>
+          <h5 class="card-title">{{ listing.property_title }}</h5>
           <p class="card-text">
-            {{ listing.description }}
+            {{ listing.property_description }}
           </p>
           <a href="/listing/{{ listing.id }}" class="btn btn-outline-secondary">Details</a>
         </div>

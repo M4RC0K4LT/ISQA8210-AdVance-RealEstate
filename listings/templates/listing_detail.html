@@ -3,7 +3,7 @@
 
 <!-- Page Title -->
 <blockquote class="blockquote text-center" style="margin-top:100px;">
-  <h3>{{ listing.title }}</h3>
+  <h3>{{ listing.property_title }}</h3>
 </blockquote>
 </br>
 
@@ -40,17 +40,18 @@
 
     <div class="card-body">
       <p class="card-text text-center">
-        {{ listing.description }}
+        {{ listing.property_description }}
       </p>
 
       <!-- Property status label -->
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
-          {% if listing.status_id == 1 %}
+
+          {% if listing.property_status_id == 1 %}
             <span class="badge bg-success">Available</span>
-          {% elif listing.status_id == 2 %}
+          {% elif listing.property_status_id == 2 %}
             <span class="badge bg-secondary">Pending</span>
-          {% elif listing.status_id == 3 %}
+          {% elif listing.property_status_id == 3 %}
             <span class="badge bg-danger">Sold</span>
           {% else %}
             <span class="badge bg-info">Status not disclosed</span>
@@ -67,9 +68,9 @@
         </li>
 
         <!-- Further details on property -->
-        <li class="list-group-item"><bold>Neighborhood: </bold>{{ listing.neighborhood }}</li>
-        <li class="list-group-item"><bold>Type: </bold>{{ listing.hometype }}</li>
-        <li class="list-group-item"><bold>Price: </bold>{{ listing.price }}</li>
+        <li class="list-group-item"><bold>Neighborhood: </bold>{{ listing.property_neighborhood }}</li>
+        <li class="list-group-item"><bold>Type: </bold>{{ listing.property_type }}</li>
+        <li class="list-group-item"><bold>Price: </bold>{{ listing.property_price }}</li>
       </ul>
 
     </div>
@@ -80,7 +81,7 @@
 <!-- Floating action buttons: Delete and Feature -->
 {% if user.is_authenticated %}
   {% load bootstrap_icons %}
-  {% if listing.featured %}
+  {% if listing.property_feature_status %}
     <a data-bs-toggle="modal" data-bs-target="#featuredModal"  class="float_btt_feature_selected" >{% bs_icon 'star' size="30px" extra_classes="icon_feature_selected" %}</a>
   {% else %}
     <a data-bs-toggle="modal" data-bs-target="#featuredModal"  class="float_btt_feature" >{% bs_icon 'star' size="30px" extra_classes="icon_feature" %}</a>
@@ -94,7 +95,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirm deleting {{ listing.title }}?</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Confirm deleting {{ listing.property_title }}?</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -113,15 +114,15 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        {% if listing.featured %}
-          <h5 class="modal-title" id="exampleModalLabel">Confirm removing feature for {{ listing.title }}?</h5>
+        {% if listing.property_feature_status %}
+          <h5 class="modal-title" id="exampleModalLabel">Confirm removing feature for {{ listing.property_title }}?</h5>
         {% else %}
-          <h5 class="modal-title" id="exampleModalLabel">Confirm featuring {{ listing.title }}?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Confirm featuring {{ listing.property_title }}?</h5>
         {% endif %}
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        {% if listing.featured %}
+        {% if listing.property_feature_status %}
           This action will de-select the listing as featured and removes it from the landing page.
         {% else %}
           This action will select the listing as featured and displays it on the landing page. The current one will be de-selected.

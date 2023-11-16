@@ -1,16 +1,16 @@
 from django.shortcuts import render
-from listings.models import Listing, ListingImages
+from listings.models import Property, Property_Image
 
 # Landing Page
 def home_view(request):
     try:
         #Check if any listing is featured
-        featured_listing = Listing.objects.get(featured=True)
-        images = ListingImages.objects.select_related().filter(listing = featured_listing.id).values()
+        featured_listing = Property.objects.get(property_feature_status=True)
+        images = Property_Image.objects.select_related().filter(property_id = featured_listing)
         image_urls = []
         for image in images:
-            image_urls.append(image["image"])
-    except Listing.DoesNotExist:
+            image_urls.append(str(image.property_image_location))
+    except Property.DoesNotExist:
         featured_listing = None
         image_urls = None
     return render(request, 'home.html', {'listing_featured': featured_listing, 'image_urls' : image_urls})
