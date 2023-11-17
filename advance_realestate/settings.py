@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-_mb%ws(kmv-kakt595q1=t%b_c-hh7+igt-)nl6c39-tt$nx^u
 DEBUG = True
 
 
-
+ALLOWED_HOSTS = ["marcokalt.pythonanywhere.com", "127.0.0.1"]
 
 
 # Application definition
@@ -127,7 +127,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfile')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
