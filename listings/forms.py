@@ -1,11 +1,16 @@
 from django import forms
-from .models import Property, Property_Image
+from .models import Property, Property_Address, Property_Image
  
  
 class ListingUploadForm(forms.ModelForm):
     class Meta:
         model = Property
-        fields = ['property_title', 'property_description', 'property_address', 'property_type', 'property_neighborhood', 'property_price', 'property_price_range', 'property_feature_status']
+        fields = ['property_title', 'property_description', 'property_type', 'property_neighborhood', 'property_price', 'property_price_range', 'property_feature_status']
+        
+class AddressUploadForm(forms.ModelForm):
+    class Meta:
+        model = Property_Address
+        fields = ['property_address_street', 'property_address_city', 'property_address_zip', 'property_address_state']
         
   
 # General multiple file input     

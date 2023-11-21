@@ -42,6 +42,19 @@ class Property_Price_Range(models.Model):
     def __str__(self):
         return self.property_price_range_name
     
+# Address of a listing
+class Property_Address(models.Model):
+    class Meta:
+        verbose_name = 'Property_Address'
+        verbose_name_plural = 'Property_Addresses'
+    property_address_street = models.CharField(max_length=200)
+    property_address_city = models.CharField(max_length=200)
+    property_address_zip = models.CharField(max_length=200)
+    property_address_state = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.property_address_street
+    
 # Main Listing-Model 
 class Property(models.Model):
     class Meta:
@@ -50,7 +63,7 @@ class Property(models.Model):
     last_modified = models.DateTimeField(auto_now_add=True)
     property_title = models.CharField(max_length=200)
     property_description = models.TextField()
-    property_address = models.CharField(max_length=200)
+    property_address = models.ForeignKey(Property_Address, on_delete=models.PROTECT)
     property_status = models.ForeignKey(Property_Status, on_delete=models.PROTECT, default=1)
     property_feature_status = models.BooleanField(default=False)
     property_type = models.ForeignKey(Property_Type, on_delete=models.PROTECT)
@@ -90,6 +103,7 @@ class Property(models.Model):
         for image in images:
             try:
                 os.remove(os.path.join(settings.MEDIA_ROOT, str(image["property_image_location"])))
+                image.delete()
             except Exception as e:
                pass
         super(Property, self).delete(*args, **kwargs)

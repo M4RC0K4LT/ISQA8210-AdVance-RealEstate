@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
 from .filters import ListingsFilter
-from .forms import ListingImagesUploadForm, ListingUploadForm
-from .models import Property, Property_Image
+from .forms import AddressUploadForm, ListingImagesUploadForm, ListingUploadForm
+from .models import Property, Property_Address, Property_Image
 
 
 # All Listings view including filter option
@@ -42,11 +42,15 @@ def listing_detail_view(request, listing_id):
 def listings_upload(request):   
     if request.method == 'POST':   
         #Two forms combined: 
-        listing_form = ListingUploadForm(request.POST)
+        address_form = AddressUploadForm(request.POST)
         image_form = ListingImagesUploadForm(request.POST, request.FILES)
+        listing_form = ListingUploadForm(request.POST)
         
-        if listing_form.is_valid() and image_form.is_valid():
-            lis = listing_form.save()
+        if listing_form.is_valid() and image_form.is_valid() and address_form.is_valid():
+            add = address_form.save()
+            lis = listing_form.save(commit=False)
+            lis.property_address = add
+            lis.save()
             #Save every uploaded image in ListingImage Model
             for img in request.FILES.getlist("image"):
                 images = Property_Image(property_id=lis.id, property_image_location=img)
@@ -55,7 +59,8 @@ def listings_upload(request):
     else:
         listing_form = ListingUploadForm()
         image_form = ListingImagesUploadForm()
-    return render(request, 'upload_listing.html', {'listing_form': listing_form, 'image_form': image_form})
+        address_form = AddressUploadForm()
+    return render(request, 'upload_listing.html', {'listing_form': listing_form, 'image_form': image_form, 'address_form': address_form})
  
 
 # Delete listing
@@ -63,6 +68,8 @@ def listings_upload(request):
 def listing_delete(request, listing_id):
   listing = Property.objects.get(id=listing_id)
   listing.delete()
+  address = Property_Address.objects.get(id=listing.property_address_id)
+  address.delete()
   return HttpResponseRedirect("/listings")
 
 
