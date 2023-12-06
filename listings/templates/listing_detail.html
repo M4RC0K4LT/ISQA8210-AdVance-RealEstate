@@ -1,140 +1,80 @@
 {% extends "base.html" %}
 {% block content %}
+<body >
 
-<!-- Page Title -->
-<blockquote class="blockquote text-center" style="margin-top:100px;">
-  <h3>{{ listing.property_title }}</h3>
-</blockquote>
-</br>
 
-<!-- Card: Listing Details -->
-<div class="col-lg-6" style="margin:auto;">
-  <div class="card">
+    <div class="container">
+    <div class="row"  style="padding-left: 50px">
+        <div class="col-3" style="font-size:23px;margin-left: -50px;font-weight: 500;color: #065834">
+            Selected property        </div>
+        <div class="col-2">
+            <button style="font-size: 16px;background-color: #065834;cursor: pointer;color: white;line-height: 14pt;;width: 250px">CLICK TO CONTACT AGENT TODAY!</button>
+        </div>
 
-    <!-- Bootstrap Carousel for property images -->
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
-        {% for img in image_urls %}
-          {% if forloop.first %}
-            <div class="carousel-item active">
-          {% else %}
-            <div class="carousel-item">
-          {% endif %}
-          <img
-            src="../media/{{ img }}"
-            class="card-img-top"
-            alt="{{ listing.name }}"
-          />
-          </div>  
-        {% endfor %}
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
     </div>
+<br>
 
-    <div class="card-body">
-      <p class="card-text text-center">
-        {{ listing.property_description }}
-      </p>
+   <div class="row" >
+    {% for img in image_urls %}
+        <div class="col-md-3 mb-3">
+            <img style="height: 260px;width: 100%" src="../media/{{ img }}" alt="image">
+        </div>
+          <div class="col-md-3 mb-3">
+            <img style="height: 260px;width: 100%" src="../media/{{ img }}" alt="image">
+        </div>  <div class="col-md-3 mb-3">
+            <img style="height: 260px;width: 100%" src="../media/{{ img }}" alt="image">
+        </div>  <div class="col-md-3 mb-3">
+            <img style="height: 260px;width: 100%" src="../media/{{ img }}" alt="image">
+        </div>
+    {% endfor %}
+</div>
 
-      <!-- Property status label -->
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
 
-          {% if listing.property_status_id == 1 %}
-            <span class="badge bg-success">Available</span>
-          {% elif listing.property_status_id == 2 %}
-            <span class="badge bg-secondary">Pending</span>
-          {% elif listing.property_status_id == 3 %}
-            <span class="badge bg-danger">Sold</span>
-          {% else %}
-            <span class="badge bg-info">Status not disclosed</span>
-          {% endif %}
+ <br><br>
+    <div class="row" style="padding-left: 2px" >
 
-          <!-- Property status change when admin -->
-          {% if user.is_authenticated %}
-            <div class="btn-group btn-group-sm" style="float:right" role="group" aria-label="Basic example">
-              <a href="/listing/status/{{ listing.id }}/1" role="button" class="btn btn-light">Available</a>
-              <a href="/listing/status/{{ listing.id }}/2"role="button" class="btn btn-light">Pending</a>
-              <a href="/listing/status/{{ listing.id }}/3"role="button" class="btn btn-light">Sold</a>
+        <div class="col-3"  >
+            <div class="row">
+                <button style="width: 250px">TYPE - {{ listing.property_type }}</button>
             </div>
-          {% endif %}
-        </li>
-
-        <!-- Further details on property -->
-        <li class="list-group-item"><bold>Neighborhood: </bold>{{ listing.property_neighborhood }}</li>
-        <li class="list-group-item"><bold>Type: </bold>{{ listing.property_type }}</li>
-        <li class="list-group-item"><bold>Price: </bold>{{ listing.property_price }}</li>
-      </ul>
-
-    </div>
-  </div>
-</div>
-
-
-<!-- Floating action buttons: Delete and Feature -->
+            <br>
+            <div class="row">
+            <button style="width: 250px;" >ADDRESS - {{ listing.property_address }}</button>
+                    </div>
+        </div>
+     <div class="col-3" >
+                <button style="width: 250px">NEIGHBORHOOD - {{ listing.property_neighborhood }}</button>
+        </div>
+        <div class="col-3">
+                <button>PRICE - ${{ listing.property_price }}</button>
+        </div>
 {% if user.is_authenticated %}
-  {% load bootstrap_icons %}
-  {% if listing.property_feature_status %}
-    <a data-bs-toggle="modal" data-bs-target="#featuredModal"  class="float_btt_feature_selected" >{% bs_icon 'star' size="30px" extra_classes="icon_feature_selected" %}</a>
-  {% else %}
-    <a data-bs-toggle="modal" data-bs-target="#featuredModal"  class="float_btt_feature" >{% bs_icon 'star' size="30px" extra_classes="icon_feature" %}</a>
-  {% endif %}
-  <a data-bs-toggle="modal" data-bs-target="#deleteModal" class="float_btt_delete">{% bs_icon 'trash3' size="30px" extra_classes="icon_delete" %}</a>
-{% endif %}
+        <div class="col" style="margin-left: 87%;margin-top: -12%">
+        <a href="/admin/listings/property/{{ listing.id }}/delete/" class="deletelink" onclick="return confirm('Are you sure you want to delete?')">
+
+            <button style="margin-left: 0;cursor: pointer;height: 38px;width: 170px">REMOVE</button></a>
+            <br>  <br>
+                <button style="height: 38px;cursor: pointer;width: 170px" >ADD AS FEATURED</button>
+            <BR><BR>
+             <button style="height: 38px;cursor: pointer;width: 170px" >CHANGE STATUS</button>
+        </div>
+            </div>
+        </div>
+    {% endif %}
 
 
-<!-- Bootstrap Modal: Confirm delete popup -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Confirm deleting {{ listing.property_title }}?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        This action is non-reversible and the listing will be removed from the database. If it was featured, another listing will get selected.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <form action="/listing/delete/{{ listing.id }}"><button type="submit" class="btn btn-danger">Delete</button></form>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Bootstrap Modal: Confirm featured popup -->
-<div class="modal fade" id="featuredModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        {% if listing.property_feature_status %}
-          <h5 class="modal-title" id="exampleModalLabel">Confirm removing feature for {{ listing.property_title }}?</h5>
-        {% else %}
-          <h5 class="modal-title" id="exampleModalLabel">Confirm featuring {{ listing.property_title }}?</h5>
-        {% endif %}
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        {% if listing.property_feature_status %}
-          This action will de-select the listing as featured and removes it from the landing page.
-        {% else %}
-          This action will select the listing as featured and displays it on the landing page. The current one will be de-selected.
-        {% endif %}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <form action="/listing/feature/{{ listing.id }}"><button type="submit" class="btn btn-success">Confirm</button></form>
-      </div>
-    </div>
-  </div>
-</div>
 
+  </body>
+   <style>
+       .row>*{
+       padding-left: 0;
+       padding-right: 0;
+   }
+       .row button{
+            font-size: 16px;background-color: black;color: white;width: 200px;font-family: sans-serif;
+            cursor: auto;
+       }
+   </style>
 
 {% endblock %}
