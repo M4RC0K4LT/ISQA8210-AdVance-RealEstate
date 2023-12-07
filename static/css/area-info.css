@@ -1,0 +1,32 @@
+#explore-header{
+font-size: 40px;
+font-style: bold;
+font-family:'Open Sans', sans-serif;
+}
+
+.area-main-body{
+margin:50px,50px,50px,50px;
+width:100%;
+display:inline-block;
+}
+
+#img1,#img2,#img3{
+height:200px;
+}
+.zoo-card{
+margin:50px;
+float:left;
+width:25%;
+}
+
+.zorinsky-card{
+margin:50px;
+float:left;
+width:25%;
+}
+
+.downtown-card{
+margin:50px;
+float:left;
+width:25%;
+}
