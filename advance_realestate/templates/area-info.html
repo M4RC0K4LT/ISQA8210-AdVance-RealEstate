@@ -1,14 +1,44 @@
 {% extends "base.html" %}
 {% block content %}
 
-
-
+<head>
+  <link rel="stylesheet" href="../static/css/area-info.css">
+</head>
 <blockquote class="blockquote text-center" style="margin-top:100px;">
-  <h3>Area Info</h3>
+    <h2 id="explore-header"> Explore Omaha like never before </h2>
 </blockquote>
 </br>
+<div class="area-main-box">
+    <div class="area-main-body">
 
+        <div class="zoo-card" style="width: 18rem;">
+            <img id="img1" src="../static/images/area_zoo_static.jpeg" class="card-img-top" alt="..." >
+            <div class="card-body">
+                <h5 class="card-title">Omaha Zoo</h5>
+                <p class="card-text">Enjoy a glimpse of the wild with an experience that you cannot forget.
+                Interact with wildlife first hand, the most interesting aquarium where you could
+                touch and feed the fishes.</p>
+            </div>
+        </div>
 
+          <div id="img2" class="zorinsky-card" style="width: 18rem;">
+            <img src="../static/images/area_zorisnky_static.jpeg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Zorinsky Lake</h5>
+                <p class="card-text">Wanna enjoy a refreshing run? Then zorinsky is the place for you. With a calm and
+                close to nature location, zorisnky brings you close to nature</p>
+            </div>
+        </div>
 
+          <div class="downtown-card" style="width: 18rem;">
+            <img id="img3" src="../static/images/area_downtown_static.jpeg" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Downtown Omaha</h5>
+                <p class="card-text">Downtown Omaha is the place where all the night life comes to action, with beautiful
+                outdoor patios to enjoy an evening dinner and places to hangout with friends and family.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
