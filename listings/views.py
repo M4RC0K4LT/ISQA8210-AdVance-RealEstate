@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from .filters import ListingsFilter
 from .forms import AddressUploadForm, ListingImagesUploadForm, ListingUploadForm
-from .models import Property, Property_Address, Property_Image
+from .models import Property, Property_Address, Property_Image, Property_Status
 
 
 # All Listings view including filter option
