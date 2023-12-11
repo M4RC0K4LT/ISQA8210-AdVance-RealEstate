@@ -92,3 +92,38 @@ def listing_status(request, listing_id, status_id):
   listing.property_status_id = status_id
   listing.save()
   return HttpResponseRedirect("/listing/" + str(listing_id))
+
+
+
+
+
+@login_required
+def listing_change_status(request, listing_id):
+    listing = get_object_or_404(Property, id=listing_id)
+
+    # Get all status options from the Property_Status model
+    status_options = list(Property_Status.objects.values_list('property_status_name', flat=True))
+
+    current_status = listing.property_status.property_status_name
+    next_index = (status_options.index(current_status) + 1) % len(status_options)
+    new_status = status_options[next_index]
+
+    # Update the listing status
+    listing.property_status = Property_Status.objects.get(property_status_name=new_status)
+    listing.save()
+
+    # Return a JSON response (you can customize the response as needed)
+    return JsonResponse({'status': 'success', 'message': 'Status changed successfully'})
+
+
+
+@login_required
+def listing_add_as_featured(request, listing_id):
+    listing = get_object_or_404(Property, id=listing_id)
+
+    # Set the property_feature_status to True
+    listing.property_feature_status = True
+    listing.save()
+
+    # Return a JSON response (you can customize the response as needed)
+    return JsonResponse({'status': 'success', 'message': 'Added as featured successfully'})
