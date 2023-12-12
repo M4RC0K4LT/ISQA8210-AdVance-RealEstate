@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search History Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .summary {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+<h1>AdVance Real Estate</h1>
+    <h2>Search History Report</h2>
+
+    <!-- Summary Section -->
+    <div class="summary">
+        <h2>Monthly Summary</h2>
+        {% regroup search_history by property_filter_date|date:"F Y" as monthly_counts %}
+        {% for month in monthly_counts %}
+            <p>In {{ month.grouper }}, there were {{ month.list|length }} searches.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Search History Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Price Range</th>
+                <th>Property Type</th>
+                <th>Neighborhood</th>
+            </tr>
+        </thead>
+          <tbody>
+            {% for entry in search_history %}
+                {% if entry.property_price_range or entry.property_type or entry.property_neighborhood %}
+                    <tr>
+                        <td>{{ entry.property_filter_date }}</td>
+                        <td>{{ entry.property_price_range }}</td>
+                        <td>{{ entry.property_type }}</td>
+                        <td>{{ entry.property_neighborhood }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
