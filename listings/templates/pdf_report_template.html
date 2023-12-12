@@ -48,7 +48,7 @@
         <h2>Monthly Summary</h2>
         {% regroup search_history by property_filter_date|date:"F Y" as monthly_counts %}
         {% for month in monthly_counts %}
-            <p>In {{ month.grouper }}, there were {{ month.list|length }} searches.</p>
+          <p>In {{ month.grouper }}, there were {{ month.list|length|add:"-1" }} searches.</p>
         {% endfor %}
     </div>
 
