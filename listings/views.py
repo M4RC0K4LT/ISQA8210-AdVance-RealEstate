@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.http import JsonResponse
 from .filters import ListingsFilter
 from .forms import AddressUploadForm, ListingImagesUploadForm, ListingUploadForm
-from .models import Property, Property_Address, Property_Image, Property_Status, Filter1
+from .models import Property, Property_Address, Property_Image, Property_Status, Filter
 from django.utils import timezone
 
 from django.template.loader import get_template
@@ -21,7 +21,7 @@ def listings_view(request):
         property_neighborhood = filtered_listings.form.cleaned_data.get('property_neighborhood')
 
         # Check if a Search_Filter instance already exists with the same values
-        existing_filter = Filter1.objects.filter(
+        existing_filter = Filter.objects.filter(
             property_price_range=property_price_range,
             property_type=property_type,
             property_neighborhood=property_neighborhood,
@@ -32,7 +32,7 @@ def listings_view(request):
             existing_filter.property_filter_date = timezone.now()  # Update the timestamp if needed
             existing_filter.save()
         else:
-            filter_instance = Filter1(
+            filter_instance = Filter(
                 property_price_range=property_price_range,
                 property_type=property_type,
                 property_neighborhood=property_neighborhood,
@@ -151,7 +151,7 @@ def listing_add_as_featured(request, listing_id):
 
 def generate_pdf_report(request):
     # Fetch the search history from the database
-    search_history = Filter1.objects.all()
+    search_history = Filter.objects.all()
 
     # Render the HTML template with the search history
     template_path = 'pdf_report_template.html'  # Create this template
