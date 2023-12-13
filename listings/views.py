@@ -151,7 +151,7 @@ def listing_add_as_featured(request, listing_id):
 
 def generate_pdf_report(request):
     # Fetch the search history from the database
-    search_history = Search_Filter.objects.all()
+    search_history = Filter1.objects.all()
 
     # Render the HTML template with the search history
     template_path = 'pdf_report_template.html'  # Create this template
