@@ -163,4 +163,4 @@ class Filter1(models.Model):
     def save(self, *args, **kwargs):
         # You can add default values logic here if needed
 
-        super(Search_Filter, self).save(*args, **kwargs)
+        super(Filter1, self).save(*args, **kwargs)
