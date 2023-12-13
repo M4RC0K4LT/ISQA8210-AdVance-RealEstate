@@ -137,7 +137,7 @@ class Filter(models.Model):
     property_neighborhood= models.ForeignKey(Property_Neighborhood,on_delete=models.CASCADE)
 
 
-class Search_Filter(models.Model):
+class Filter1(models.Model):
     property_price_range = models.ForeignKey(
         Property_Price_Range,
         on_delete=models.CASCADE,
