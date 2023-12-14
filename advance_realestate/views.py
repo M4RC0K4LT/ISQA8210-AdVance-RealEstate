@@ -43,7 +43,7 @@ def about_view(request):
                 contact_name = request.POST.get("name")
                 contact_mail = request.POST.get("email")
                 contact_message = request.POST.get("message")
-                subject = subject + str(contact_name) + str(contact_mail)
+                subject = subject + str(contact_name) + " " + str(contact_mail)
                 message = message + str(contact_name) + "    " + str(contact_mail) + "    " + str(contact_message)
                 send_mail(subject, message, email_from, recipient_list)  
                 success = True

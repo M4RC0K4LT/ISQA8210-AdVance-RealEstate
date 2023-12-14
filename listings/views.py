@@ -45,6 +45,7 @@ def listings_view(request):
 def listing_detail_view(request, listing_id):
     listing = get_object_or_404(Property, id=listing_id)
     images = Property_Image.objects.select_related().filter(property_id = listing.id).values()
+    address = get_object_or_404(Property_Address, id = listing.property_address.id)
     image_urls = []
     for image in images:
         image_urls.append(image["property_image_location"])
@@ -71,7 +72,7 @@ def listing_detail_view(request, listing_id):
     else:
         form = ContactForm()
 
-    return render(request, 'listing_detail.html', context={'listing': listing, 'image_urls': image_urls, 'form': form, 'alert': success}) 
+    return render(request, 'listing_detail.html', context={'listing': listing, 'address': address, 'image_urls': image_urls, 'form': form, 'alert': success}) 
 
 
 # Upload of new listing

@@ -10,7 +10,7 @@
         <div id="listing_title_div" class="col-3" style="font-size:23px;margin-left: -50px;font-weight: 500;color: #065834">
             {{ listing.property_title }}        </div>
         <div class="col-2">
-            <button style="font-size: 16px;background-color: #065834;cursor: pointer;color: white;line-height: 14pt;;width: 250px" data-bs-toggle="modal" data-bs-target="#contactModal">CLICK TO CONTACT AGENT TODAY!</button>
+            <button style="font-size: 16px;background-color: #065834;cursor: pointer;color: white;line-height: 14pt;width: 250px; margin-left: 700px" data-bs-toggle="modal" data-bs-target="#contactModal">CLICK TO CONTACT AGENT TODAY!</button>
         </div>
 
     </div>
@@ -32,25 +32,20 @@
         <div class="col-3"  >
             <div class="row">
                 <button style="width: 250px">TYPE - {{ listing.property_type }}</button>
+                <button style="width: 250px;margin-top: 35px" >STREET - {{ address.property_address_street }}</button>
             </div>
-            <br>
-            <div class="row">
-            <button style="width: 250px;" >ADDRESS - {{ listing.property_address }}</button>
-
-
-
- </div>
         </div>
-     <div class="col-3" >
+        <div class="col-3" >
                 <button style="width: 250px">NEIGHBORHOOD - {{ listing.property_neighborhood }}</button>
-          <button style="width: 250px;margin-top: 35px">STATUS - {{ listing.property_status }}</button>
+                <button style="width: 250px;margin-top: 35px" >CITY - {{ address.property_address_city }} {{ address.property_address_zip }}</button>
         </div>
         <div class="col-3">
-                <button>PRICE - ${{ listing.property_price }}</button>
+                <button style="width: 250px;">PRICE - ${{ listing.property_price }}</button>
+                <button style="width: 250px;margin-top: 35px">STATUS - {{ listing.property_status }}</button>
         </div>
 
 {% if user.is_authenticated %}
-        <div class="col" style="margin-left: 87%;margin-top: -12%">
+        <div class="col" style="margin-left: 87%;margin-top: -8%">
         <a href="/admin/listings/property/{{ listing.id }}/delete/" class="deletelink" onclick="return confirm('Are you sure you want to delete?')">
 
             <button style="margin-left: 0;cursor: pointer;height: 38px;width: 170px">REMOVE</button></a>
@@ -61,7 +56,8 @@
         </div>
             </div>
         </div>
-    {% endif %}
+        <code style="font-size: 16px;background-color: black;color: white;width: 200px;font-family: sans-serif;padding:6px; position: relative; left: -12px">{{ listing.property_description }}</code>
+{% endif %}
 
 {% if alert == True %}
     <div class="alert alert-success" role="alert">
