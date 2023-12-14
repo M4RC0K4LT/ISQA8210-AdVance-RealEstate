@@ -2,10 +2,14 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.http import JsonResponse
+
+from advance_realestate.forms import ContactForm
 from .filters import ListingsFilter
 from .forms import AddressUploadForm, ListingImagesUploadForm, ListingUploadForm
 from .models import Property, Property_Address, Property_Image, Property_Status, Filter
 from django.utils import timezone
+from django.conf import settings
+from django.core.mail import send_mail
 
 from django.template.loader import get_template
 from xhtml2pdf import pisa
@@ -20,18 +24,7 @@ def listings_view(request):
         property_type = filtered_listings.form.cleaned_data.get('property_type')
         property_neighborhood = filtered_listings.form.cleaned_data.get('property_neighborhood')
 
-        # Check if a Search_Filter instance already exists with the same values
-        existing_filter = Filter.objects.filter(
-            property_price_range=property_price_range,
-            property_type=property_type,
-            property_neighborhood=property_neighborhood,
-        ).first()
-
-        # If exists, update; otherwise, create a new instance
-        if existing_filter:
-            existing_filter.property_filter_date = timezone.now()  # Update the timestamp if needed
-            existing_filter.save()
-        else:
+        if (property_price_range or property_type or property_neighborhood):
             filter_instance = Filter(
                 property_price_range=property_price_range,
                 property_type=property_type,
@@ -55,7 +48,30 @@ def listing_detail_view(request, listing_id):
     image_urls = []
     for image in images:
         image_urls.append(image["property_image_location"])
-    return render(request, 'listing_detail.html', context={'listing': listing, 'image_urls': image_urls}) 
+        
+    success = None
+    subject = 'CONTACT FORM: '
+    message = 'New message from: '
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = ["marco@kaltenstadler.net",]
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            try:
+                contact_name = request.POST.get("name")
+                contact_mail = request.POST.get("email")
+                contact_message = request.POST.get("message")
+                subject = subject + str(contact_name) + " " + str(contact_mail)
+                message = message + str(contact_name) + " (" + str(contact_mail) + ") is in interested in " + str(listing.property_title) + " with the ID " + str(listing.id) + ". The following is his personal message: " + str(contact_message)
+                send_mail(subject, message, email_from, recipient_list)  
+                success = True
+            except Exception as e:
+                print(e)
+                success = False
+    else:
+        form = ContactForm()
+
+    return render(request, 'listing_detail.html', context={'listing': listing, 'image_urls': image_urls, 'form': form, 'alert': success}) 
 
 
 # Upload of new listing
@@ -96,26 +112,24 @@ def listing_delete(request, listing_id):
 
 
 # Feature listing
-@login_required
-def listing_feature(request, listing_id):
-  listing = Property.objects.get(id=listing_id)
-  if listing.property_feature_status == True:
-      listing.property_feature_status = False
-  else:
-      listing.property_feature_status = True
-  listing.save()
-  return HttpResponseRedirect("/listing/" + str(listing_id))
+#@login_required
+#def listing_feature(request, listing_id):
+#  listing = Property.objects.get(id=listing_id)
+#  if listing.property_feature_status == True:
+#      listing.property_feature_status = False
+#  else:
+#      listing.property_feature_status = True
+#  listing.save()
+#  return HttpResponseRedirect("/listing/" + str(listing_id))
 
 
 # Change status of listing
-@login_required
-def listing_status(request, listing_id, status_id):
-  listing = Property.objects.get(id=listing_id)
-  listing.property_status_id = status_id
-  listing.save()
-  return HttpResponseRedirect("/listing/" + str(listing_id))
-
-
+#@login_required
+#def listing_status(request, listing_id, status_id):
+#  listing = Property.objects.get(id=listing_id)
+#  listing.property_status_id = status_id
+#  listing.save()
+#  return HttpResponseRedirect("/listing/" + str(listing_id))
 
 
 
@@ -149,6 +163,7 @@ def listing_add_as_featured(request, listing_id):
 
     # Return a JSON response (you can customize the response as needed)
     return JsonResponse({'status': 'success', 'message': 'Added as featured successfully'})
+
 
 def generate_pdf_report(request):
     # Fetch the search history from the database

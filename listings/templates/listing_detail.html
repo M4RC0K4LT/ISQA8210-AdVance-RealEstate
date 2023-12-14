@@ -1,14 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
+{% load crispy_forms_tags %}
+{% load bootstrap_icons %}
 <body >
 
 
     <div class="container">
     <div class="row"  style="padding-left: 50px">
-        <div class="col-3" style="font-size:23px;margin-left: -50px;font-weight: 500;color: #065834">
-            Selected property        </div>
+        <div id="listing_title_div" class="col-3" style="font-size:23px;margin-left: -50px;font-weight: 500;color: #065834">
+            {{ listing.property_title }}        </div>
         <div class="col-2">
-            <button style="font-size: 16px;background-color: #065834;cursor: pointer;color: white;line-height: 14pt;;width: 250px">CLICK TO CONTACT AGENT TODAY!</button>
+            <button style="font-size: 16px;background-color: #065834;cursor: pointer;color: white;line-height: 14pt;;width: 250px" data-bs-toggle="modal" data-bs-target="#contactModal">CLICK TO CONTACT AGENT TODAY!</button>
         </div>
 
     </div>
@@ -61,7 +63,37 @@
         </div>
     {% endif %}
 
+{% if alert == True %}
+    <div class="alert alert-success" role="alert">
+        {% bs_icon 'envelope' %}    Your message got successfully send to your agent Madison! You will get a reply soon!
+    </div>
+{% elif alert == False %}
+    <div class="alert alert-danger" role="alert">
+        Something went wrong! Try it again!
+    </div>
+{% endif %}
 
+<!-- Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Contact Form</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method = "post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Send message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
   </body>

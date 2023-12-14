@@ -29,7 +29,7 @@ class tests_listing_detail(unittest.TestCase):
 
         except NoSuchElementException:
             driver.close()
-            self.fail("error occured")
+            self.fail("error occured on listing detail test case")
             driver.close()
 
 

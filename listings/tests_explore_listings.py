@@ -47,7 +47,7 @@ def test_explore_listings(driver):
         time.sleep(5)
 
     except:
-        print('Something went wrong')
+        print('Something went wrong on the explore listings test case')
         driver.close()
 
 

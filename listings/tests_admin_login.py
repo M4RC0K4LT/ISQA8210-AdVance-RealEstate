@@ -36,12 +36,12 @@ def test_admin_login(driver):
         try:
             driver.find_element(By.XPATH, error_msg_path)
         except:
-            print('Something went wrong')
+            print("Something went wrong on the admin login test case")
             driver.close()
             return
         
     except Exception as e:
-        print('Something went wrong')
+        print("Something went wrong on the admin login test case")
         driver.close()
 
 

@@ -1,105 +1,119 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% load bootstrap_icons %}
 
-<blockquote class="blockquote text-center" style="margin-top:100px;">
-<img lang="en">
+<style>
+    blockquote {
+        font-family: 'Arial', sans-serif;
+    }
+    #container {
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-        }
+        background-color: white;
+        padding: 10px;
+        min-height: 100%;
+    }
 
-        #container {
-
-            background-color: white;
-            padding: 10px;
-            min-height: 100%;
-        }
-
-        #text-container {
-            float: left;
-            width: 500%;
-            padding-right: 20px;
-            background-color: white;
-            text-align:left;
+    #text-container {
+        float: left;
+        width: 500%;
+        padding-right: 20px;
+        background-color: white;
+        text-align:left;
 
 
-        }
-        #image-container {
-            float: left;
-            width: 30%;
-            margin-right: 10px;
-        }
+    }
+    #image-container {
+        float: left;
+        width: 30%;
+        margin-right: 10px;
+    }
 
-         img {
-            float: left;
-            margin-right: 20px; /* Adjust the margin as needed */
-              } /*adjusting the container top margin
+        img {
+        float: left;
+        margin-right: 20px; /* Adjust the margin as needed */
+            } /*adjusting the container top margin
 
-         .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            background-color: #4CAF50;
-            color: black;
-            border: 1px solid #4CAF50;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #45a049; /* Darker green background color */
+        .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        text-align: center;
+        text-decoration: none;
+        background-color: #4CAF50;
+        color: black;
+        border: 1px solid #4CAF50;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .button:hover {
+        background-color: #45a049; /* Darker green background color */
 
-          .button {
-          background-color: black;
-          color:white;
-              float: right;
+    .button {
+        background-color: black;
+        color:white;
+        float: right;
+    }
+    p {
+        margin-left: 50px;
+    }
+</style>
 
-           }
-          p {
-  margin-left: 50px;
-}
-
-    </style>
-
-    <div >
-
-           <p align="left"><b>Real Estate Agent- Madison Vance </b></p>
-    <img src="https://na.rdcpix.com/c35625211cd67678ffb6c3afaa32f795w-c3171719007rd-w832_h468_r4_q80.webp"  alt="Some Text" style="width:400px;height:400px;">
-
-    </div>
-    <div>
-        <p align="left">Meet Madison Vance, a vibrant and dedicated real estate agent whose passion for helping clients find their dream homes extends beyond the transaction. Madison provides individualized advice and in-depth knowledge to make every property search seamless and enjoyable</p>
-    <p></p>
+<blockquote class="blockquote text-center" style="margin-top:100px; height: 60vh;">
+        <div >
+            <p align="left"><b>Real Estate Agent - Madison Vance </b></p>
+            <img src={% static 'madison.jpg' %}  alt="Some Text" style="width:400px;height:400px;">
+        </div>
+        <div>
+            <p align="left">Meet Madison Vance, a vibrant and dedicated real estate agent whose passion for helping clients find their dream homes extends beyond the transaction. Madison provides individualized advice and in-depth knowledge to make every property search seamless and enjoyable</p>
+            <p></p>
             <p align="left"><b>Contact Information  </b></p>
             <p align="left"><b>Email Adress: MadisonV@iyr.cm </b></p>
             <p align="left"><b>Phone: 402-123-4567 </b></p>
             <p align="left"><b>Contact Adress: 1414 Marbee drive Omaha, NE 68124 </b></p>
-            <a href="valodeamirzac@gmail.com">
-                <button class="button">CLICK TO CONTACT<BR /> MADISON VANCE</button>
-            </a>
-
-     </class>
-    </div>
-
-</body>
-
-</html>
-
+            <button class="button" id="contact_madison_btn" data-bs-toggle="modal" data-bs-target="#contactModal">CLICK TO CONTACT<BR /> MADISON VANCE</button>
+        </div>
 </blockquote>
-</br>
 
+{% if alert == True %}
+    <div class="alert alert-success" role="alert">
+        {% bs_icon 'envelope' %}    Your message got successfully send to your agent Madison! You will get a reply soon!
+    </div>
+{% elif alert == False %}
+    <div class="alert alert-danger" role="alert">
+        Something went wrong! Try it again!
+    </div>
+{% endif %}
+
+  
+<!-- Modal -->
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Contact Form</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method = "post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+            
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="contact_submit_btn" class="btn btn-success">Send message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}

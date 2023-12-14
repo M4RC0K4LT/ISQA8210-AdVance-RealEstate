@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from advance_realestate.forms import ContactForm
 from listings.models import Property, Property_Image
+from django.conf import settings
+from django.core.mail import send_mail
 
 # Landing Page
 def home_view(request):
@@ -27,5 +30,26 @@ def area_view(request):
     return render(request, 'area-info.html')
 
 # AboutUs Page
-def about_view(request):   
-    return render(request, 'about-us.html')
+def about_view(request):
+    success = None
+    subject = 'CONTACT FORM: '
+    message = 'New message from: '
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = ["marco@kaltenstadler.net",]
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            try:
+                contact_name = request.POST.get("name")
+                contact_mail = request.POST.get("email")
+                contact_message = request.POST.get("message")
+                subject = subject + str(contact_name) + str(contact_mail)
+                message = message + str(contact_name) + "    " + str(contact_mail) + "    " + str(contact_message)
+                send_mail(subject, message, email_from, recipient_list)  
+                success = True
+            except Exception as e:
+                print(e)
+                success = False
+    else:
+        form = ContactForm()
+    return render(request, 'about-us.html', {'form': form, 'alert': success})

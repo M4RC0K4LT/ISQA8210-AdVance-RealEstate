@@ -14,7 +14,7 @@
         <div class="row" style="padding-left: 12px;padding-right: 12px">
           <div>
             <!-- Bootstrap Carousel for property images -->
-            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div id="carouselExampleControls" class="carousel slide">
               <div class="carousel-inner">
                 {% for img in image_urls %}
                   {% if forloop.first %}
@@ -51,7 +51,7 @@
   <div class="btn-group" role="group" aria-label="Basic example"  >
 
       <button style="padding: 8px 8px;margin-left: 21%;font-size: small;background-color: white"><a  style="font-family: sans-serif;text-decoration: none; color: #828383 ;font-weight: 600" href="/listing/{{ listing_featured.id }}">Interested in the featured property? &nbsp;&nbsp;&nbsp;&nbsp;</a></button>
-      <button type="button" style="font-size: small;color: #fdfdfd;background-color: #414045;margin-right: 15%"><a style="text-decoration: none;color: white; font-weight: 600;font-family: sans-serif" href="/listing/{{ listing_featured.id }}" >Click here for more details!</a></button>
+      <button type="button" style="font-size: small;color: #fdfdfd;background-color: #414045;margin-right: 15%"><a style="text-decoration: none;color: white; font-weight: 600;font-family: sans-serif" id="featured_listing_link" href="/listing/{{ listing_featured.id }}" >Click here for more details!</a></button>
 
 </div>
 
