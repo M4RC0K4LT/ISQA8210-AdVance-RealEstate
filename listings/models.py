@@ -132,6 +132,11 @@ class Filter(models.Model):
         verbose_name = 'Applied_Filter'
         verbose_name_plural = 'Applied_Filters'
     property_filter_date = models.DateTimeField(auto_now_add=True)
-    property_price_range = models.ForeignKey(Property_Price_Range,on_delete=models.CASCADE)
-    property_type = models.ForeignKey(Property_Type,on_delete=models.CASCADE)
-    property_neighborhood= models.ForeignKey(Property_Neighborhood,on_delete=models.CASCADE)
+    property_price_range = models.ForeignKey(Property_Price_Range, on_delete=models.CASCADE,null=True, blank=True)
+    property_type = models.ForeignKey(Property_Type,on_delete=models.CASCADE,null=True, blank=True)
+    property_neighborhood= models.ForeignKey(Property_Neighborhood, on_delete=models.CASCADE,null=True, blank=True)
+    def save(self, *args, **kwargs):
+        # You can add default values logic here if needed
+
+        super(Filter, self).save(*args, **kwargs)
+

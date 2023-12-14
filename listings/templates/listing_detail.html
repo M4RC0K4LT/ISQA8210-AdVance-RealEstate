@@ -34,23 +34,28 @@
             <br>
             <div class="row">
             <button style="width: 250px;" >ADDRESS - {{ listing.property_address }}</button>
-                    </div>
+
+
+
+ </div>
         </div>
      <div class="col-3" >
                 <button style="width: 250px">NEIGHBORHOOD - {{ listing.property_neighborhood }}</button>
+          <button style="width: 250px;margin-top: 35px">STATUS - {{ listing.property_status }}</button>
         </div>
         <div class="col-3">
                 <button>PRICE - ${{ listing.property_price }}</button>
         </div>
+
 {% if user.is_authenticated %}
         <div class="col" style="margin-left: 87%;margin-top: -12%">
         <a href="/admin/listings/property/{{ listing.id }}/delete/" class="deletelink" onclick="return confirm('Are you sure you want to delete?')">
 
             <button style="margin-left: 0;cursor: pointer;height: 38px;width: 170px">REMOVE</button></a>
             <br>  <br>
-                <button style="height: 38px;cursor: pointer;width: 170px" >ADD AS FEATURED</button>
+                <button id="addAsFeaturedButton{{ listing.id }}" class="featured-button" onclick="addAsFeatured('{{ listing.id }}')" style="height: 38px;cursor: pointer;width: 170px" >ADD AS FEATURED</button>
             <BR><BR>
-             <button style="height: 38px;cursor: pointer;width: 170px" >CHANGE STATUS</button>
+             <button  onclick="changeStatus('{{ listing.id }}')" style="height: 38px;cursor: pointer;width: 170px" >CHANGE STATUS</button>
         </div>
             </div>
         </div>
@@ -71,4 +76,60 @@
        }
    </style>
 
+<script>
+
+    function changeStatus(listingId) {
+        // AJAX request to change the status
+        fetch(`/listing/${listingId}/change_status/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token if needed
+            },
+            body: JSON.stringify({}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response, e.g., show a success message
+            console.log(data);
+
+            // Reload the page after the button is clicked
+            location.reload();
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error);
+        });
+    }
+function addAsFeatured(listingId) {
+        // AJAX request to add the listing as featured and remove feature from others
+        fetch(`/listing/${listingId}/add_as_featured/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token if needed
+            },
+            body: JSON.stringify({}),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response, e.g., show a success message
+            console.log(data);
+
+            // Remove feature status from all other properties
+            const allPropertyButtons = document.querySelectorAll('.featured-button');
+            allPropertyButtons.forEach(button => {
+                button.style.backgroundColor = '';  // Reset the button style
+            });
+
+            // Set the feature status for the clicked property
+            const clickedPropertyButton = document.querySelector(`#addAsFeaturedButton${listingId}`);
+            clickedPropertyButton.style.backgroundColor = 'green';  // Adjust the style accordingly
+        })
+        .catch(error => {
+            // Handle errors
+            console.error('Error:', error);
+        });
+    }
+</script>
 {% endblock %}
