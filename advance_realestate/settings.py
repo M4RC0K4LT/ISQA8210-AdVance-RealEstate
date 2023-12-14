@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'listings',
     'django_bootstrap_icons',
     'django_filters',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

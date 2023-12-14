@@ -31,7 +31,7 @@
       <div class="card">
 
         <!-- Bootstrap Carousel: Property Images -->
-        <div id="carouselExampleControls{{ listing.id }}" class="carousel slide" data-bs-ride="carousel">
+        <div id="carouselExampleControls{{ listing.id }}" class="carousel slide">
           <div class="carousel-inner">
             {% for img in images_all|select_listing:listing.id %} <!-- CustomFilter to select images to listing -->
               {% if forloop.first %}

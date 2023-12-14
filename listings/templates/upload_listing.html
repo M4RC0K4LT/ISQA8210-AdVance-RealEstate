@@ -1,20 +1,160 @@
 {% extends "base.html" %}
 
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
 {% block content %}
+
+<style>
+  .form-control{
+       width: 100%;
+       padding: 0;
+       height: 100%;
+       border: 0;
+  }
+  .form-control-desc{
+    width: 100%;
+    padding: 0;
+    height: 28px;
+    border: 0;
+    resize: none;
+}
+</style>
 
 <blockquote class="blockquote text-center" style="margin-top:100px;">
   <h2>Upload a new listing:</h2>
 </blockquote>
 
 <!-- DjangoModelForm to upload new listing -->
-<form method = "post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ listing_form|crispy }}
-  {{ address_form|crispy }}
-  {{ image_form|crispy }}
-  <button  class="btn btn-success" type="submit">Upload</button>
-</form>
+<div class="col-lg-5" style="margin:auto; margin-top: 20px;">
+  <form method = "post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <p style="margin-bottom: 5px;">General Information:</p>
+    <!-- Title -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> Title </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field listing_form.property_title class="form-control" type="text" %}
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> Description </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field listing_form.property_description class="form-control-desc" type="text" %}
+      </div>
+    </div>
+
+    <!-- Type -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> Type </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field listing_form.property_type class="form-control" type="select" %}
+      </div>
+    </div>
+
+    <!-- Neigborhood -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> Neigborhood </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field listing_form.property_neighborhood class="form-control" type="select" %}
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> Price </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field listing_form.property_price class="form-control" type="number" %}
+      </div>
+    </div>
+
+    <!-- Price Range -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> Price Range </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field listing_form.property_price_range class="form-control" type="select" %}
+      </div>
+    </div>
+
+    </br>
+    <p style="margin-bottom: 5px;">Address Details:</p>
+
+    <!-- Address Street -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> Street </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field address_form.property_address_street class="form-control" type="text" %}
+      </div>
+    </div>
+
+    <!-- Address City -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> City </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field address_form.property_address_city class="form-control" type="text" %}
+      </div>
+    </div>
+
+    <!-- Address ZIP -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> ZIP </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field address_form.property_address_zip class="form-control" type="number" %}
+      </div>
+    </div>
+
+    <!-- Address State -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> State </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field address_form.property_address_state class="form-control" type="text" %}
+      </div>
+    </div>
+
+    </br>
+    <p style="margin-bottom: 5px;">Images:</p>
+    <!-- Images -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; border-style: solid; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 30%; height: 100%; background-color: black; float: left;"> 
+        <div style="margin-left: 10px;"><p style="color: white"> Images </p></div>
+      </div>
+      <div class="form-group" style="width: 70%; height: 100%; float: left;"> 
+        {% render_field image_form.image class="form-control" type="file" %}
+      </div>
+    </div>
+
+    <!-- Feture Status -->
+    <div style="width: 100%; height: 30px; border: 1px; border-color: black; margin-top: 5px; margin-bottom: 5px;">
+      <div style="width: 100%; height: 100%; background-color: white; float: left;"> 
+        <div style="margin-left: 10px; float: left;"><p style="color: black">{{ listing_form.property_feature_status }}  Feature this property?</p></div>
+      </div>        
+    </div>
+    
+    <button  class="btn btn-success" type="submit">Upload</button>
+  </form>
+</div>
 
 {% endblock %}
