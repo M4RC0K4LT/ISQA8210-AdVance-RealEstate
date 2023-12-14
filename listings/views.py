@@ -60,6 +60,7 @@ def listings_upload(request):
         listing_form = ListingUploadForm()
         image_form = ListingImagesUploadForm()
         address_form = AddressUploadForm()
+
     return render(request, 'upload_listing.html', {'listing_form': listing_form, 'image_form': image_form, 'address_form': address_form})
  
 

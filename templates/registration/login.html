@@ -20,10 +20,10 @@
                   <input type="password" id="id_password" name="password" class="form-control form-control-lg" />
                   <label class="form-label" for="typePasswordX">Password</label>
                 </div>
-                <button class="btn btn-light btn-lg px-5" style="background-color: #CCCCCC" type="submit">Login</button>
+                <button class="btn btn-light btn-lg px-5" id="submit_btn" style="background-color: #CCCCCC" type="submit">Login</button>
               </div>
               {% if form.errors %}
-                Your username and password didn't match. Please try again.
+                <p id="error_msg">Your username and password didn't match. Please try again.</p>
               {% endif %}
 
               {% if next %}
