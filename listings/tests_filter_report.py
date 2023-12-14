@@ -11,7 +11,7 @@ submit_button_path = '//*[@id="submit_btn"]'
 error_msg_path = '//*[@id="error_msg"]'
 report_button_path = "//button[contains(., 'Filter report')]"
 
-def test_admin_login(driver):
+def test_filter_report(driver):
     try:
         login_button = driver.find_element(By.XPATH, login_button_path)
 
@@ -44,4 +44,4 @@ class HostTest(LiveServerTestCase):
     driver = webdriver.Chrome()
     driver.get('http://127.0.0.1:8000/')
     time.sleep(5)
-    test_admin_login(driver)
+    test_filter_report(driver)
